@@ -1,41 +1,27 @@
 # Lambda Layer
+custom:
+  serviceName: &serviceName todo # <-- #TODO Edit service name
+  commonMappings: ${file(../../../serverless.common.yml):custom}
+  projectName: ${self.custom.commonMappings.projectName}
+
 frameworkVersion: ">=2.66.2 <3.0.0"
 projectDir: ./
-service:
-  Fn::Join:
-    - "-"
-    - "${self:custom.common_mappings.appname}"
-    - *service-name
-    - "layer"
+
+# Can't use Fn::Join in this property, so it must be hardcoded
+service: ${self:custom.commonMappings.projectName}-todo-layer-${self:provider.stage} # <-- #TODO Edit service name
+
 package:
   individually: true
 
-custom:
-  common_mappings: ${file(../../../serverless.common.yml):custom}
-  metadata:
-    service-name: &service-name todo # <-- edit service name
-    common-layer-props: &common-layer-props
-      package:
-        artifact: 
-          Fn::Join:
-            - "./"
-            - *service-name
-            - "api"
-            - ./todo-api-layer.zip
-  layers:
-    dev:
-      todo-dev:
-        <<: &common-layer-props
-    stg:
-      todo-stg:
-        <<: &common-layer-props
-    prd:
-      todo-prd:
-        <<: &common-layer-props
-
 provider:
   name: aws
-  runtime: ${self:custom.common_mappings.runtime.${self:provider.stage}}
+  runtime: ${self:custom.commonMappings.runtime.${self:provider.stage}}
   stage: ${opt:stage}
-  region: ${self:custom.common_mappings.region}
-layers: ${self:custom.layers.${self:provider.stage}}
+  region: ${self:custom.commonMappings.region}
+layers:
+  nodelayer:
+    name: "${self:custom.commonMappings.projectName}-${self:custom.serviceName}-layer-${self:provider.stage}"
+    compatibleRuntimes:
+      - ${self:custom.commonMappings.runtime.${self:provider.stage}}
+    package:
+      artifact: "./${self:custom.serviceName}-layer.zip"

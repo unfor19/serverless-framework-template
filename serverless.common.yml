@@ -1,7 +1,7 @@
 custom:
-  project-name: project-name
+  projectName: project-name
   region: eu-west-1
-  memory_size:
+  memorySize:
     dev: 128
     stg: 128
     prd: 128
