@@ -1,0 +1,41 @@
+# Lambda Layer
+frameworkVersion: ">=2.66.2 <3.0.0"
+projectDir: ./
+service:
+  Fn::Join:
+    - "-"
+    - "${self:custom.common_mappings.appname}"
+    - *service-name
+    - "layer"
+package:
+  individually: true
+
+custom:
+  common_mappings: ${file(../../../serverless.common.yml):custom}
+  metadata:
+    service-name: &service-name todo # <-- edit service name
+    common-layer-props: &common-layer-props
+      package:
+        artifact: 
+          Fn::Join:
+            - "./"
+            - *service-name
+            - "api"
+            - ./todo-api-layer.zip
+  layers:
+    dev:
+      todo-dev:
+        <<: &common-layer-props
+    stg:
+      todo-stg:
+        <<: &common-layer-props
+    prd:
+      todo-prd:
+        <<: &common-layer-props
+
+provider:
+  name: aws
+  runtime: ${self:custom.common_mappings.runtime.${self:provider.stage}}
+  stage: ${opt:stage}
+  region: ${self:custom.common_mappings.region}
+layers: ${self:custom.layers.${self:provider.stage}}

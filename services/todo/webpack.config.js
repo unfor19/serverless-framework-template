@@ -34,7 +34,7 @@ module.exports = {
   },
   plugins: [
     new ZipPlugin({
-      filename: 'dist_todo.zip',
+      filename: 'dist.zip',
     }),
   ],
 };

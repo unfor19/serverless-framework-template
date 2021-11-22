@@ -4,7 +4,7 @@
   "author": "Meir Gabay <unfor19@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@babel/runtime": "^7.8.7",
+    "@babel/runtime": "^7.16.0",
     "uuid": "^8.3.2"
   },
   "scripts": {
