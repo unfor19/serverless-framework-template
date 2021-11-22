@@ -9,4 +9,3 @@ __pycache__/
 !.dockerignore
 *.zip
 dist/
-!.drone.yml
