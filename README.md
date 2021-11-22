@@ -18,6 +18,10 @@ Want to learn how to get start with the serverless framework? Watch my [YouTube 
 1. AWS account
 
 1. [Docker](https://docs.docker.com/install/)
+2. serverless-framework CLI installed globally
+   ```bash
+   yarn global add serverless@^2.66.2 ts-node@^10.4.0 typescript@ ^4.5.2 webpack-cli@^4.9.1
+   ```
 
 ## Getting Started
 
