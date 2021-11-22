@@ -1,6 +1,6 @@
 # Lambda Layer
 custom:
-  serviceName: &serviceName todo # <-- #TODO Edit service name
+  serviceName: todo # <-- #TODO Edit service name
   commonMappings: ${file(../../../serverless.common.yml):custom}
   projectName: ${self.custom.commonMappings.projectName}
 
@@ -19,7 +19,7 @@ provider:
   stage: ${opt:stage}
   region: ${self:custom.commonMappings.region}
 layers:
-  nodelayer:
+  nodeLayer:
     name: "${self:custom.commonMappings.projectName}-${self:custom.serviceName}-layer-${self:provider.stage}"
     compatibleRuntimes:
       - ${self:custom.commonMappings.runtime.${self:provider.stage}}
