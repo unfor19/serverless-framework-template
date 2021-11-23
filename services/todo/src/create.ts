@@ -3,11 +3,18 @@ import { v1 as uuidv1 } from 'uuid';
 import { ITodoItem } from './interface';
 import { prepareResponse } from './controller';
 
+// Supports nest
+import { Injectable } from '@nestjs/common';
+
 const s3 = new AWS.S3({
   apiVersion: '2006-03-01',
   region: process.env.REGION || 'eu-west-1',
   signatureVersion: 'v4',
 });
+
+// Supports nest
+@Injectable()
+export class Ron {}
 
 // async function getMaxId() {
 //   const params = {
