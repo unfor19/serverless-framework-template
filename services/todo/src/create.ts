@@ -11,7 +11,7 @@ const s3 = new AWS.S3({
 
 // async function getMaxId() {
 //   const params = {
-//     Bucket: process.env.TODOS_BUCKET_NAME || '',
+//     Bucket: process.env.TODO_BUCKET_NAME || '',
 //     MaxKeys: 1000,
 //   };
 //   return new Promise((resolve, reject) => {
@@ -43,7 +43,7 @@ async function uploadObject(item: ITodoItem) {
     Metadata: {
       content: item.content,
     },
-    Bucket: process.env.TODOS_BUCKET_NAME || '',
+    Bucket: process.env.TODO_BUCKET_NAME || '',
     Key: uuid,
   };
   const putObjectPromise = s3.putObject(params).promise();

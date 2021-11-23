@@ -5,7 +5,10 @@
   "license": "MIT",
   "scripts": {
     "deploy:msg": "echo \"$(tput bold)$(tput setaf 1)$(tput setab 7)IMPORTANT!$(tput sgr 0)$(tput bold) Do not forget to re-deploy the API to update Lambda Layer version$(tput sgr 0)\"",
-    "build": "cd ./nodejs && yarn addlayer && cd ../.. && export FOLDER_NAME=\"$(basename \"$PWD\")\" && cd layer && zip -rq \"$FOLDER_NAME-layer.zip\" nodejs",
+    "build": "cd ./nodejs && yarn addlayer && cd ../.. && export FOLDER_NAME=\"$(basename \"$PWD\")\" && cd layer && zip -rq \"${FOLDER_NAME}-layer-dev.zip\" nodejs",
+    "build:dev": "cd ./nodejs && yarn addlayer && cd ../.. && export FOLDER_NAME=\"$(basename \"$PWD\")\" && cd layer && zip -rq \"${FOLDER_NAME}-layer-dev.zip\" nodejs",
+    "build:stg": "cd ./nodejs && yarn addlayer && cd ../.. && export FOLDER_NAME=\"$(basename \"$PWD\")\" && cd layer && zip -rq \"${FOLDER_NAME}-layer-stg.zip\" nodejs",
+    "build:prd": "cd ./nodejs && yarn addlayer && cd ../.. && export FOLDER_NAME=\"$(basename \"$PWD\")\" && cd layer && zip -rq \"${FOLDER_NAME}-layer-prd.zip\" nodejs",
     "deploy:dev": "sls deploy --stage=dev && yarn deploy:msg",
     "deploy:stg": "sls deploy --stage=stg && yarn deploy:msg",
     "deploy:prd": "sls deploy --stage=prd && yarn deploy:msg",

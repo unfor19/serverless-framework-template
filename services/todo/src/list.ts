@@ -9,7 +9,7 @@ const s3 = new AWS.S3({
 
 async function listObjects() {
   const params = {
-    Bucket: process.env.TODOS_BUCKET_NAME || '',
+    Bucket: process.env.TODO_BUCKET_NAME || '',
     MaxKeys: 1000,
   };
   return new Promise((resolve, reject) => {

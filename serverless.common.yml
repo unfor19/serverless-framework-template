@@ -9,3 +9,7 @@ custom:
     dev: nodejs14.x
     stg: nodejs14.x
     prd: nodejs14.x
+  httpApiPayload: # Must be set as string
+    dev: "2.0"
+    stg: "2.0"
+    prd: "2.0"

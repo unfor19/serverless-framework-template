@@ -13,7 +13,7 @@ async function updateObject(item: ITodoItem) {
     Metadata: {
       content: item.content,
     },
-    Bucket: process.env.TODOS_BUCKET_NAME || '',
+    Bucket: process.env.TODO_BUCKET_NAME || '',
     Key: item.id.toString(),
   };
   const putObjectPromise = s3.putObject(params).promise();

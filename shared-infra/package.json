@@ -1,0 +1,14 @@
+{
+  "name": "serverless-template-todo-shared-infra",
+  "version": "0.1.0",
+  "author": "Meir Gabay <unfor19@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "deploy:dev": "sls deploy --stage=dev",
+    "deploy:stg": "sls deploy --stage=stg",
+    "deploy:prd": "sls deploy --stage=prd",
+    "destroy:dev": "sls remove --stage=dev",
+    "destroy:stg": "sls remove --stage=stg",
+    "destroy:prd": "sls remove --stage=prd"
+  }
+}

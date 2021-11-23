@@ -10,7 +10,7 @@ const s3 = new AWS.S3({
 async function deleteObject(id: number) {
   return new Promise((resolve, reject) => {
     const params = {
-      Bucket: process.env.TODOS_BUCKET_NAME || '',
+      Bucket: process.env.TODO_BUCKET_NAME || '',
       Key: id.toString(),
     };
     s3.deleteObject(params, (err: any, data: any) => {

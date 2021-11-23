@@ -1,0 +1,61 @@
+# Shared Infrastructure
+custom:
+  serviceName: todo # <-- #TODO Edit service name
+  commonMappings: ${file(../serverless.common.yml):custom}
+  projectName: ${self.custom.commonMappings.projectName}
+
+# Can't use Fn::Join in this property, so it must be hardcoded
+service: ${self:custom.commonMappings.projectName}-todo-shared-infra # <-- #TODO Edit service name
+
+frameworkVersion: ">=2.66.2 <3.0.0"
+projectDir: ./
+
+provider:
+  name: aws
+  runtime: ${self:custom.commonMappings.runtime.${self:provider.stage}}
+  stage: ${opt:stage}
+  region: ${self:custom.commonMappings.region}
+
+resources:
+  Resources:
+    ApiGatewayHttp:
+      Type: AWS::ApiGatewayV2::Api
+      Properties:
+        Name: "${self:custom.commonMappings.projectName}-apigw-http-${self:provider.stage}"
+        ProtocolType: HTTP
+        Tags: # Accepts only JSON
+          { "ProjectName": "${self:custom.commonMappings.projectName}" }
+
+    TodoBucket:
+      Type: AWS::S3::Bucket
+      DeletionPolicy: Delete
+      Properties:
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: True
+          BlockPublicPolicy: True
+          IgnorePublicAcls: True
+          RestrictPublicBuckets: True
+        Tags: # Accepts only JSON List(Map{Key,Value})
+          [
+            {
+              "Key": "ProjectName",
+              "Value": "${self:custom.commonMappings.projectName}",
+            },
+          ]
+
+  Outputs:
+    ApiGatewayHttpId:
+      Value:
+        Ref: ApiGatewayHttp
+      Export:
+        Name: "${self:custom.commonMappings.projectName}-ApiGatewayHttpId-${self:provider.stage}"
+    ApiGatewayHttpApiEndpoint:
+      Value: !Sub ${ApiGatewayHttp.ApiEndpoint}
+      Export:
+        Name: "${self:custom.commonMappings.projectName}-ApiGatewayHttpApiEndpoint-${self:provider.stage}"
+    TodoBucketRegionalDomainName:
+      Value: !GetAtt TodoBucket.RegionalDomainName
+    TodoBucketName:
+      Value: !Ref TodoBucket
+      Export:
+        Name: "${self:custom.commonMappings.projectName}-TodoBucketName-${self:provider.stage}"

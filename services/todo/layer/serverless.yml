@@ -1,20 +1,21 @@
 # Lambda Layer
 custom:
-  serviceName: todo # <-- #TODO Edit service name
+  serviceName: todo # <-- #TODO Edit service name - need to check alternatives
   commonMappings: ${file(../../../serverless.common.yml):custom}
   projectName: ${self.custom.commonMappings.projectName}
 
 frameworkVersion: ">=2.66.2 <3.0.0"
 projectDir: ./
 
-# Can't use Fn::Join in this property, so it must be hardcoded
-service: ${self:custom.commonMappings.projectName}-todo-layer-${self:provider.stage} # <-- #TODO Edit service name
+# Can't use Fn::Join in this property, so it must be hardcoded - need to check alternatives
+service: ${self:custom.commonMappings.projectName}-todo-layer # <-- #TODO Edit service name
 
 package:
   individually: true
 
 provider:
   name: aws
+  lambdaHashingVersion: 20201221
   runtime: ${self:custom.commonMappings.runtime.${self:provider.stage}}
   stage: ${opt:stage}
   region: ${self:custom.commonMappings.region}
@@ -24,4 +25,4 @@ layers:
     compatibleRuntimes:
       - ${self:custom.commonMappings.runtime.${self:provider.stage}}
     package:
-      artifact: "./${self:custom.serviceName}-layer.zip"
+      artifact: "./${self:custom.serviceName}-layer-${self:provider.stage}.zip"
