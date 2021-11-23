@@ -1,5 +1,7 @@
 # serverless-template
 
+## WORK-IN-PROGRESS
+
 <a href="https://github.com/unfor19/serverless-template#serverless-template">
   <img src="https://unfor19-serverless-template.s3-eu-west-1.amazonaws.com/assets/serverless-template-logo-oneline.png" alt="Serverless-Template" width="100%" />
 </a>
