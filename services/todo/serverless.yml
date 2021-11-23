@@ -1,3 +1,4 @@
+# if it's left-most, then it's a reserved keyword, e.g service, package, etc.
 service: project-name-todo # stack name in cfn
 package:
   individually: true # whether to select artifacts manually - zip files
