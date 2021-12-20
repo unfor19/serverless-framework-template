@@ -1,121 +1,81 @@
-# serverless-template
+# serverless-framework-template
 
-## WORK-IN-PROGRESS
-
-<a href="https://github.com/unfor19/serverless-template#serverless-template">
-  <img src="https://unfor19-serverless-template.s3-eu-west-1.amazonaws.com/assets/serverless-template-logo-oneline.png" alt="Serverless-Template" width="100%" />
-</a>
-
-[![GitHub version](https://badge.fury.io/gh/unfor19%2Fserverless-template.svg)](https://badge.fury.io/gh/unfor19%2Fserverless-template)
-[![Build Status](https://cloud.drone.io/api/badges/unfor19/serverless-template/status.svg?ref=refs/heads/master)](https://cloud.drone.io/unfor19/serverless-template)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
-[![serverless](http://public.serverless.com/badges/v3.svg)](https://www.serverless.com)
-
-Boilerplate template for the serverless-framework.
-
-Want to learn how to get start with the serverless framework? Watch my [YouTube video](https://www.youtube.com/watch?v=j_a4_nu72d8) where I explain about how to use the framework, while using this GitHub repository.
+## WORK-IN-PROGRESS (WIP)
 
 ## Requirements
 
-1. AWS account
-
-1. [Docker](https://docs.docker.com/install/)
-2. serverless-framework CLI installed globally
-   ```bash
-   yarn global add serverless@^2.66.2
-   ```
-
+**TODO**: Add requirements
 ## Getting Started
 
-NOTE- add docs about the need to create a stage in API Gateway V2 (HTTP)
+**TODO**: add docs about the need to create a stage in API Gateway V2 (HTTP)
 
-<details><summary>Goal
-</summary>
+Firstly, click [Use this template](https://github.com/unfor19/serverless-framework-template) (**do not tick** *Include all branches*)
 
-Deploy two serverless services (APIs)
+### Dependencies And Packages
 
-- todo-api - NodeJS 12.x (JavaScript/TypeScript)
-  - [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) app - To keep it simple, we're using an S3 bucket as a database. The contents are saved to the objects' [user-defined metadata](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html)
-- greet-api - Python 3.8
-  - Send a name and get a greeting
+All dev+prd dependencies should be included in the service's main [services/todo/package.json](services/todo/package.json) `devDependencies` section. Keep the `dependencies` empty, we'll cover it in the next paragraph.
 
-Both services have dependencies, and we'll use Lambda Layers to meet these dependencies.
+To separate dependencies from the application, we'll use an [AWS Lambda Layer](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html) per service (in our case `todo`). The separation quickens the deployment process of the Lambda Function, because you only deploy the code (a few kilobytes) excluding packages/dependencies.
 
-</details>
 
-1. **Clone** this repository (or [Use as template](https://github.com/unfor19/serverless-template/generate) and then clone)
+### Cloud Resources
 
+Create an [API Gateway v2 HTTP](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api.html) to serve the `todo` service publicly. The API Gateway exposes HTTP endpoints publicly, allowing users/frontend-apps to use the `todo` service by sending HTTP requests.
+
+**Important**: The S3 bucket is part of the requirements for the `todo` service.
+
+**Deploy AWS resources** - S3 Bucket and API Gateway
+```bash
+cd shared-infra
+yarn deploy:dev
+```
+
+### Development And Deployment Process
+
+To add a dependency, execute the following procedure
+
+1. Add a package to [services/todo/package.json](services/todo/package.json) in `devDependencies` and [services/todo/package.json](services/todo/layer/nodejs/package.json) in `dependencies`
    ```bash
-   $ (home) git clone https://github.com/unfor19/serverless-template.git
+   cd services/todo
+   yarn add --dev some-package
+   # services/todo/layer/nodejs/package.json - devDependencies
    ```
 
-2. **Use this [Docker image](https://hub.docker.com/r/unfor19/serverless-template)**
-
-   <details><summary>Image Usage Examples</summary>
-
-   - With [aws-vault](https://github.com/99designs/aws-vault)
-     ```bash
-     $ (serverless-template) aws-vault exec PROFILE_NAME -- bash ./scripts/docker_run.sh
-     ```
-   - AWS Environment variables
-     ```bash
-     $ (serverless-template) export AWS_SECRET_ACCESS_KEY=A123123
-     $ (serverless-template) export AWS_ACCESS_KEY_ID=B1232123123
-     $ (serverless-template) export AWS_REGION=eu-west-1
-     $ (serverless-template) export AWS_PROFILE=my-profile-name
-     $ (serverless-template) bash ./scripts/docker_run.sh
-     ```
-   - AWS Credentials & Config files
-
-     ```bash
-     $ (serverless-template) bash ./scripts/docker_run.sh
-     ```
-
-   **Tip**: Take a look at the [docker_run](./scripts/docker_run.sh) script
-
-   </details>
-
    ```bash
-   $ (serverless-template) bash ./scripts/docker_run.sh
-   ...                     # Pulling image ...
-   $ /code (master)        # We're in!
+   cd services/todo/layer/nodejs
+   yarn add some-package
+   # services/todo/package.json - dependencies
+   ```
+   **TODO**: Add a script that runs `yarn add` and `yarn add --dev`
+2. **Build the Lambda Layer**
+   ```bash
+   cd services/todo/layer/nodejs
+   yarn build:dev
+   # Produces
+   # services/todo/layer/nodejs/todo-layer-dev.zip
+   ```
+3. **Deploy the Lambda Layer**
+   ```bash
+   cd services/todo/layer/nodejs
+   yarn deploy:dev
+   ```
+4. **Build the Lambda Function**
+   ```bash
+   cd services/todo
+   yarn build:dev
+   ```
+5. **Deploy/Redeploy the Lambda Function** to consume the latest Lambda Layer version
+   ```bash
+   cd services/todo
+   yarn deploy:dev
    ```
 
-3. **Build App** - this includes installing dependencies
-
-   ```bash
-   $ /code (master) bash ./scripts/app_build.sh
-   🔎  Identifying services folders ...
-   ...
-   ✅  Finished
-   ```
-
-4. **Deploy AWS resources** - S3 Bucket and API Gateway
-
-   ```bash
-   $ /code/aws-resources (master) yarn deploy:dev
-   ```
-
-5. **Deploy AWS Lambda Layers**
-
-   ```bash
-   $ /code/services/todo-api/layer (master)   yarn deploy:dev
-   $ /code/services/greet-api/layer (master)  yarn deploy:dev
-   ```
-
-6. **Deploy AWS Lambda Functions**
-
-   ```bash
-   $ /code/services/todo-api (master)  yarn deploy:dev
-   $ /code/services/greet-api (master) yarn deploy:dev
-   ```
-
-## Usage
+## Todo Service Usage
 
 Replace `ENDPOINT` with the API Gateway's endpoint that was generated by serverless-framework, and `AWS_REGION` with the relevant region.
 
 ```bash
-$ /code (master) APIGATEWAY_ENDPOINT=https://ENDPOINT.execute-api.AWS_REGION.amazonaws.com
+APIGATEWAY_ENDPOINT=https://ENDPOINT.execute-api.AWS_REGION.amazonaws.com
 ```
 
 #### Create
@@ -178,6 +138,12 @@ MY_NAME="Willy"
 
 curl --location --request GET "${APIGATEWAY_ENDPOINT}/dev/greet/${MY_NAME}"
 ```
+
+<details>
+
+<summary>Original README.md - Expand/Collapse</summary>
+
+
 
 ## Modify
 
@@ -491,11 +457,9 @@ Pull requests are welcome! Ideally, create a feature branch and issue for every 
 4. Push to the branch (`git push --set-up-stream origin my-new-feature`)
 5. Create a new Pull Request and tell us about your changes
 
-## Connect
 
-- [Facebook - Operations Israel](https://www.facebook.com/groups/ops.il)
+</details>
 
-- [Slack - Serverless Contributors](http://serverless-contrib.slack.com/) - Ask us questions in #help or #general - tag `@Meir Gabay`
 
 ## Authors
 
