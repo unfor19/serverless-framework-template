@@ -5,7 +5,9 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.16.0",
-    "@nestjs/common": "^7.6.15",
+    "@nestjs/common": "^8.2.4",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.4.0",
     "uuid": "^8.3.2"
   },
   "scripts": {

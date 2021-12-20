@@ -64,11 +64,12 @@ To add a dependency, execute the following procedure
    cd services/todo
    yarn build:dev
    ```
-5. **Deploy/Redeploy the Lambda Function** to consume the latest Lambda Layer version
+5. **Deploy/Redeploy the Lambda Function**
    ```bash
    cd services/todo
    yarn deploy:dev
    ```
+   **TODO**: Add a script that gets the latest lambda layer version as env var `LAMBDA_LAYER_VERSION`
 
 ## Todo Service Usage
 
@@ -85,58 +86,48 @@ Replace `MY_CONTENT`
 ```bash
 MY_CONTENT="some content"
 
-curl --location --request POST ${APIGATEWAY_ENDPOINT}/dev/todo/create \
+CONTENT_ID="$(curl -s --location --request POST ${APIGATEWAY_ENDPOINT}/dev/todo/create \
 --header 'Content-Type: application/json' \
---data-raw '{ "content": "'"${MY_CONTENT}"'" }'
+--data-raw '{ "content": "'"${MY_CONTENT}"'" }' | jq -rc '.id')"
+echo "$CONTENT_ID"
 ```
 
 #### Get (Read)
 
-Replace `MY_UUID`
+The variable `CONTENT_ID` is used according to the previous step
 
 ```bash
-MY_UUID='cf27a7de-f3f7-43a0-b12f-ff8016b7b7e0'
-
-curl --location --request GET ${APIGATEWAY_ENDPOINT}/dev/todo/get/${MY_UUID}
+# CONTENT_ID=assigned_with_uuid_12312323
+curl --location --request GET ${APIGATEWAY_ENDPOINT}/dev/todo/get/${CONTENT_ID}
 ```
 
 #### Update
 
-Replace `MY_UUID` and `MY_CONTENT`
+Replace `MY_CONTENT`
 
 ```bash
-MY_UUID='cf27a7de-f3f7-43a0-b12f-ff8016b7b7e0'
+# CONTENT_ID=assigned_with_uuid_12312323
 MY_CONTENT='wohoo new content!'
-
 curl --location --request POST ${APIGATEWAY_ENDPOINT}/dev/todo/update \
 --header 'Content-Type: application/json' \
---data-raw '  { "id": "'${MY_UUID}'", "content": "'"${MY_CONTENT}"'" }'
+--data-raw '  { "id": "'${CONTENT_ID}'", "content": "'"${MY_CONTENT}"'" }'
+
+# Verify update
+curl --location --request GET ${APIGATEWAY_ENDPOINT}/dev/todo/get/${CONTENT_ID}
 ```
 
 #### Delete
 
-Replace `MY_UUID`
-
 ```bash
-MY_UUID='cf27a7de-f3f7-43a0-b12f-ff8016b7b7e0'
+# CONTENT_ID=assigned_with_uuid_12312323
 
-curl --location --request DELETE ${APIGATEWAY_ENDPOINT}/dev/todo/delete/${MY_UUID}
+curl --location --request DELETE ${APIGATEWAY_ENDPOINT}/dev/todo/delete/${CONTENT_ID}
 ```
 
 #### List
 
 ```bash
 curl --location --request GET ${APIGATEWAY_ENDPOINT}/dev/todo/list
-```
-
-#### Greet
-
-Replace `MY_NAME`
-
-```bash
-MY_NAME="Willy"
-
-curl --location --request GET "${APIGATEWAY_ENDPOINT}/dev/greet/${MY_NAME}"
 ```
 
 <details>

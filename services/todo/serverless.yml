@@ -1,4 +1,4 @@
-# if it's left-most, then it's a reserved keyword, e.g service, package, etc.
+### if it's left-most, then it's a reserved keyword, e.g service, package, etc.
 service: project-name-todo # stack name in cfn
 package:
   individually: true # whether to select artifacts manually - zip files
@@ -7,7 +7,7 @@ frameworkVersion: ">=2.66.2 <3.0.0"
 
 # manage your values here, no reserved keywords here
 custom:
-  lambdaLayerVersion: 4 # Update when changes
+  lambdaLayerVersion: ${env:LAMBDA_LAYER_VERSION, 1} # supplied with: yarn deploy:dev (sls deploy --stage=dev --lambda_layer_version=${LAMBDA_LAYER_VERSION})
   commonMappings: ${file(../../serverless.common.yml):custom} # importing common values
   todoBucketName: # the "database"
     "Fn::ImportValue": "${self:custom.commonMappings.projectName}-TodoBucketName-${self:provider.stage}"
@@ -48,6 +48,7 @@ provider:
   # this means ALL functions will use these layers
   layers:
     - !Sub "arn:aws:lambda:${self:provider.region}:${AWS::AccountId}:layer:${self:custom.commonMappings.projectName}-todo-layer-${self:provider.stage}:${self:custom.lambdaLayerVersion}"
+
 # finally define your functions here
 functions:
   status:

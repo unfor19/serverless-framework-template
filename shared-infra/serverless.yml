@@ -26,6 +26,16 @@ resources:
         Tags: # Accepts only JSON
           { "ProjectName": "${self:custom.commonMappings.projectName}" }
 
+    ApiGatewayHttpStage: # Must be deployed, otherwise you won't be able to deploy Lambda Functions
+      Type: AWS::ApiGatewayV2::Stage
+      Properties:
+        ApiId: !Ref ApiGatewayHttp
+        AutoDeploy: True
+        Description: "API Gateway Stage - ${self:provider.stage}"
+        StageName: "${self:provider.stage}"
+        Tags: # Accepts only JSON
+          { "ProjectName": "${self:custom.commonMappings.projectName}" }
+
     TodoBucket:
       Type: AWS::S3::Bucket
       DeletionPolicy: Delete
