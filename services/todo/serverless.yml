@@ -7,7 +7,8 @@ frameworkVersion: ">=2.66.2 <3.0.0"
 
 # manage your values here, no reserved keywords here
 custom:
-  lambdaLayerVersion: ${env:LAMBDA_LAYER_VERSION, 1} # supplied with: yarn deploy:dev (sls deploy --stage=dev --lambda_layer_version=${LAMBDA_LAYER_VERSION})
+  lambdaLayerArn:
+    "Fn::ImportValue": "sls-${self:custom.commonMappings.projectName}-todo-layer-${self:provider.stage}-NodeLayerLambdaLayerQualifiedArn"
   commonMappings: ${file(../../serverless.common.yml):custom} # importing common values
   todoBucketName: # the "database"
     "Fn::ImportValue": "${self:custom.commonMappings.projectName}-TodoBucketName-${self:provider.stage}"
@@ -47,7 +48,7 @@ provider:
 
   # this means ALL functions will use these layers
   layers:
-    - !Sub "arn:aws:lambda:${self:provider.region}:${AWS::AccountId}:layer:${self:custom.commonMappings.projectName}-todo-layer-${self:provider.stage}:${self:custom.lambdaLayerVersion}"
+    - ${self:custom.lambdaLayerArn}
 
 # finally define your functions here
 functions:
@@ -65,7 +66,7 @@ functions:
     package:
       artifact: ./dist/dist-${self:provider.stage}.zip # the package where the index.js is
     layers: # in case you need a specific layer, it's an array of layers ARNs
-      - !Sub "arn:aws:lambda:${self:provider.region}:${AWS::AccountId}:layer:${self:custom.commonMappings.projectName}-todo-layer-${self:provider.stage}:${self:custom.lambdaLayerVersion}"
+      - ${self:custom.lambdaLayerArn}
     events: # when to trigger this function? in this case, only with an http event
       - httpApi:
           path: /todo/create
@@ -301,3 +302,8 @@ resources:
                         - - "arn:aws:s3:::"
                           - ${self:custom.todoBucketName}
                           - "*"
+  Outputs:
+    LambdaLayerArn:
+      Value: ${self:custom.lambdaLayerArn}
+      Export:
+        Name: "${self:custom.commonMappings.projectName}-LambdaLayerArn-${self:provider.stage}"
