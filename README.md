@@ -7,7 +7,7 @@
 To build and deploy the [services/todo](services/todo) service, you need the following apps
 
 - [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
-- [NodeJS 14.17.0](https://nodejs.org/dist/v14.17.0/)
+- [NodeJS 14.x](https://nodejs.org/dist/v14.17.0/)
 - [serverless framework CLI](https://github.com/serverless/serverless)
   ```bash
   yarn global add serverless@2.66.2
