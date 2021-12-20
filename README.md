@@ -4,10 +4,16 @@
 
 ## Requirements
 
-**TODO**: Add requirements
-## Getting Started
+To build and deploy the [services/todo](services/todo) service, you need the following apps
 
-**TODO**: add docs about the need to create a stage in API Gateway V2 (HTTP)
+- [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- [NodeJS 14.17.0](https://nodejs.org/dist/v14.17.0/)
+- [serverless framework CLI](https://github.com/serverless/serverless)
+  ```bash
+  yarn global add serverless@2.66.2
+  ```
+
+## Getting Started
 
 Firstly, click [Use this template](https://github.com/unfor19/serverless-framework-template) (**do not tick** *Include all branches*)
 
