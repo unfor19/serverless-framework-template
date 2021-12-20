@@ -75,7 +75,6 @@ To add a dependency, execute the following procedure
    cd services/todo
    yarn deploy:dev
    ```
-   **TODO**: Add a script that gets the latest lambda layer version as env var `LAMBDA_LAYER_VERSION`
 
 ## Todo Service Usage
 
