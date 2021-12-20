@@ -1,5 +1,7 @@
 # serverless-framework-template
 
+[![Push to Docker Registries](https://github.com/unfor19/serverless-framework-template/actions/workflows/docker-latest.yml/badge.svg)](https://github.com/unfor19/serverless-framework-template/actions/workflows/docker-latest.yml) [![Dockerhub pulls](https://img.shields.io/docker/pulls/unfor19/serverless-framework-template)](https://hub.docker.com/r/unfor19/serverless-framework-template)
+
 ## WORK-IN-PROGRESS (WIP)
 
 ## Requirements
