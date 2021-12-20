@@ -13,6 +13,14 @@ To build and deploy the [services/todo](services/todo) service, you need the fol
   yarn global add serverless@2.66.2
   ```
 
+**OR** Use [Docker](https://docs.docker.com/get-docker/)
+
+Run a container which includes all the [Requirements](#requirements) above
+
+```bash
+make run-dev
+```
+
 ## Getting Started
 
 Firstly, click [Use this template](https://github.com/unfor19/serverless-framework-template) (**do not tick** *Include all branches*)
