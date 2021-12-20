@@ -1,11 +1,11 @@
 node_modules
 .*
-!.gitignore
+!.*ignore*
+!.github
 *.log
 !.prettierrc.js
 !.eslintrc.js
 !.vscode
 __pycache__/
-!.dockerignore
 *.zip
 dist/
